@@ -108,7 +108,7 @@ def main(args):
     image_syn = image_syn.detach().to(args.device).requires_grad_(True)
     syn_lr = syn_lr.detach().to(args.device).requires_grad_(True)
     optimizer_img = torch.optim.SGD([image_syn], lr=args.lr_img, momentum=0.5)
-    scheduler_img = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_img, T_max=args.Iteration, eta_min=0)
+    # scheduler_img = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_img, T_max=args.Iteration, eta_min=0)
     optimizer_lr = torch.optim.SGD([syn_lr], lr=args.lr_lr, momentum=0.5)
 
     criterion = nn.CrossEntropyLoss().to(args.device)
@@ -315,13 +315,8 @@ def main(args):
                 loss += (- ce_loss_student + ce_loss_teacher)/args.num_epsilons
             
             optimizer_img.zero_grad()
-            # optimizer_weight.zero_grad()
-
             loss.backward()
-
             optimizer_img.step()
-            # optimizer_weight.step()
-            # scheduler_img.step()
 
             for _ in student_params:
                 del _
@@ -330,6 +325,7 @@ def main(args):
                 logger.info('BPC-fKL %s iter = %04d, loss = %.4f' %(get_time(), it, loss.item()))
         
         elif args.divergence == 'rkl':
+            image_syn = image_syn.detach()
             gs = torch.zeros(args.num_epsilons, args.batch_rkl)
             gs_tilde = torch.zeros(args.num_epsilons, args.ipc*num_classes)
             h_tilde = torch.zeros((args.num_epsilons,) + image_syn.size())
