@@ -252,18 +252,6 @@ def get_time():
     return str(time.strftime("[%Y-%m-%d %H:%M:%S]", time.localtime()))
 
 
-def match_loss(gw_syn, gw_real, args):
-    gws = gw_syn.reshape(1, -1)
-    gwr = gw_real.reshape(1, -1)
-
-        
-    gws_detach = gws.clone().detach()
-    # dis = (torch.sum(gws_detach * gws) - torch.sum(gwr * gws)) #/ torch.sum(gwr * gwr)
-    # dis = 1 - torch.sum(gwr * gws) / (torch.sum(gws_detach * gws) + 1e-8)
-    dis = 1 - torch.sum(gwr * gws) / (torch.norm(gws)*torch.norm(gwr))# + 1e-8)
-
-    return dis
-
 def epoch(mode, dataloader, net, optimizer, criterion, args, aug):
     loss_avg, acc_avg, num_exp = 0, 0, 0
     net = net.to(args.device)
