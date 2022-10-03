@@ -17,7 +17,7 @@ Our code is adapted from [https://github.com/GeorgeCazenavette/mtt-distillation]
 ## Citation
 If you find this useful in your research, please consider citing our paper:
 ```
-@inproceedings{Kim2022pseudocoresets,
+@inproceedings{kim2022pseudocoresets,
   title     = {On Divergence Measures for Bayesian Pseudocoresets},
   author    = {Balhae Kim and Jungwon Choi and Seanie Lee and Yoonho Lee and Jung-Woo Ha and Juho Lee},
   booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
