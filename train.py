@@ -334,8 +334,8 @@ def main(args):
             real_images, real_labels = get_real_batch(args.batch_rkl)
             real_images, real_labels = real_images.cuda(), real_labels.cuda() 
 
-            if args.dsa and (not args.no_aug):
-                real_images = DiffAugment(real_images, args.dsa_strategy, param=args.dsa_param)
+            # if args.dsa and (not args.no_aug):
+                # real_images = DiffAugment(real_images, args.dsa_strategy, param=args.dsa_param)
             for num in range(args.num_epsilons):
                 current_param = student_params[-1].clone().detach() # unroll gradient detach 
                 eps = torch.randn_like(student_params[-1]) * args.noise_scale
@@ -350,8 +350,8 @@ def main(args):
 
                 _images = image_syn.clone().data.requires_grad_()
                 _images_aug = _images
-                if args.dsa and (not args.no_aug):
-                    _images_aug = DiffAugment(_images, args.dsa_strategy, param=args.dsa_param)
+                # if args.dsa and (not args.no_aug):
+                #     _images_aug = DiffAugment(_images, args.dsa_strategy, param=args.dsa_param)
                 outputs = student_net(_images_aug, flat_param=current_param + eps)
                 potential = -criterion_rkl(outputs, label_syn)
                 grad = torch.autograd.grad(
